@@ -1,30 +1,73 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
-import {TouchableOpacity, Text, View} from 'react-native';
-import {styles} from './src/styles';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Restaurant from './src/screens/Restaurant';
+import Orders from './src/screens/Orders';
+import Profile from './src/screens/Profile';
 
-const App = () => {
+const RestaurantStack = createNativeStackNavigator();
+const OrderStack = createNativeStackNavigator();
+const ProfileStack = createNativeStackNavigator();
+
+function RestaurantStackScreen() {
   return (
-    <View style={[styles.flx1, styles.jcc, styles.aic, styles.bgWhite]}>
-      <TouchableOpacity
-        style={[
-          styles.bw1,
-          styles.w200,
-          styles.h40,
-          styles.jcc,
-          styles.bgCoral,
-        ]}>
-        <Text style={[styles.brown]}>My 1st CLI App</Text>
-      </TouchableOpacity>
-    </View>
+    <RestaurantStack.Navigator>
+      <RestaurantStack.Screen
+        name="Restaurants Page"
+        component={Restaurant}
+        options={{headerShown: false}}
+      />
+    </RestaurantStack.Navigator>
   );
-};
+}
 
-export default App;
+function OrderStackScreen() {
+  return (
+    <OrderStack.Navigator>
+      <OrderStack.Screen
+        name="Orders Page"
+        component={Orders}
+        options={{headerShown: false}}
+      />
+    </OrderStack.Navigator>
+  );
+}
+
+function ProfileStackScreen() {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen
+        name="Profile Page"
+        component={Profile}
+        options={{headerShown: false}}
+      />
+    </ProfileStack.Navigator>
+  );
+}
+
+const Tab = createBottomTabNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Restaurants"
+          component={RestaurantStackScreen}
+          options={{headerShown: false}}
+        />
+        <Tab.Screen
+          name="Your Orders"
+          component={OrderStackScreen}
+          options={{headerShown: false}}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={ProfileStackScreen}
+          options={{headerShown: false}}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
