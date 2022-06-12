@@ -1,0 +1,15 @@
+export const borderRadius = {
+    br1: { borderRadius: 1 },
+    br2: { borderRadius: 2 },
+    br3: { borderRadius: 3 },
+    br4: { borderRadius: 4 },
+    br5: { borderRadius: 5 },
+    br6: { borderRadius: 6 },
+    br7: { borderRadius: 7 },
+    br8: { borderRadius: 8 },
+    br10: { borderRadius: 10 },
+    br13: { borderRadius: 13 },
+    br15: { borderRadius: 15 },
+    br16: { borderRadius: 16 },
+    br20: { borderRadius: 20 },
+};
