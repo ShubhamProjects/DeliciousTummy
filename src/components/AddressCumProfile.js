@@ -8,8 +8,9 @@ import Entypo from 'react-native-vector-icons/Entypo';
 
 const AddressCumProfile = () => {
   return (
-    <View style={[styles.flxr, styles.jcsb, styles.ml4, styles.mr4]}>
-      <View>
+    <View
+      style={[styles.flxr, styles.jcsb, styles.ml4, styles.mr4, styles.mt2]}>
+      <View style={[styles.ml2]}>
         <View style={[styles.flxr, styles.aic]}>
           <MaterialIcons name="my-location" size={25} color={styles.green} />
           <Text style={[tailwind`text-black font-semibold ml-2 text-lg`]}>
@@ -26,7 +27,7 @@ const AddressCumProfile = () => {
       </View>
 
       <View>
-        <View style={[tailwind`p-1 rounded-full bg-slate-500 `]}>
+        <View style={[tailwind`p-1 rounded-full bg-slate-500 mr-2`]}>
           <TouchableOpacity>
             <MaterialCommunityIcons
               name="account"

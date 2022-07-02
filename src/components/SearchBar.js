@@ -1,10 +1,16 @@
-import React from 'react';
-import {Text, View, TouchableOpacity, TextInput} from 'react-native';
+import React, {useState} from 'react';
+import {View, TouchableOpacity, TextInput} from 'react-native';
 import tailwind from 'twrnc';
 import {styles} from '../styles';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 const SearchBar = () => {
+  const [searchedText, setSearchedText] = useState('');
+
+  const onSearchTextEntered = text => {
+    setSearchedText(text);
+  };
+
   return (
     <View
       style={[
@@ -17,7 +23,16 @@ const SearchBar = () => {
         <TextInput
           placeholder="Search for food or restaurant"
           placeholderTextColor={styles.grey}
-          style={[{color: 'black'}, tailwind`w-10/12 font-semibold`]}
+          style={[
+            {color: 'black'},
+            tailwind`w-10/12 text-base ml-2 ${
+              searchedText === ''
+                ? 'italic font-light'
+                : 'not-italic font-semibold'
+            }`,
+          ]}
+          onChangeText={text => onSearchTextEntered(text)}
+          value={searchedText}
         />
         <View
           style={tailwind`border-l-2 border-slate-300 mt-2 mb-2 pl-2 pr-2 justify-center`}>

@@ -6,7 +6,7 @@ import SearchBar from './SearchBar';
 
 const Header = () => {
   return (
-    <View style={[styles.flx1]}>
+    <View style={[styles.flx1, styles.ml2, styles.mr2]}>
       <AddressCumProfile />
       <SearchBar />
     </View>

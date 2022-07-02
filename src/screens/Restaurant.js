@@ -1,48 +1,49 @@
-import React, {useRef} from 'react';
-import {View, Text, ScrollView, Animated} from 'react-native';
+import React from 'react';
+import {View, ScrollView, Animated} from 'react-native';
 import {styles} from '../styles';
 import tailwind from 'twrnc';
 import Header from '../components/Header';
 
-const MAX_HEIGHT = 135;
-const MIN_HEIGHT = 70;
-const SCROLL_DISTANCE = MAX_HEIGHT - MIN_HEIGHT;
+const MAX_HEIGHT = 140;
+const MIN_HEIGHT = 64;
 
 const Restaurant = () => {
-  let scrollOffsetY = useRef(new Animated.Value(0)).current;
+  const scrollOffsetY = new Animated.Value(0);
 
-  let headerScrollHeight = scrollOffsetY.interpolate({
-    inputRange: [0, SCROLL_DISTANCE],
-    outputRange: [MAX_HEIGHT, MIN_HEIGHT],
-    extrapolate: 'clamp',
+  const diffClamp = Animated.diffClamp(scrollOffsetY, MIN_HEIGHT, MAX_HEIGHT);
+
+  const translateY = diffClamp.interpolate({
+    inputRange: [MIN_HEIGHT, MAX_HEIGHT],
+    outputRange: [0, -MIN_HEIGHT],
   });
 
   return (
     <View style={[styles.flx1]}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        scrollEventThrottle={16}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: {
-                contentOffset: {y: scrollOffsetY},
-              },
-            },
-          ],
-          {useNativeDriver: false},
-        )}
-        style={[tailwind`bg-white`]}>
-        <View style={tailwind`h-35`} />
-      </ScrollView>
       <Animated.View
         style={[
           tailwind`absolute overflow-hidden bg-white shadow-2xl w-full p-2`,
           styles.flx1,
-          {height: headerScrollHeight, zIndex: 100},
+          {
+            transform: [{translateY: translateY}],
+            top: 0,
+            left: 0,
+            right: 0,
+            height: MAX_HEIGHT,
+            elevation: 4,
+            zIndex: 100,
+          },
         ]}>
         <Header />
       </Animated.View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={e => {
+          scrollOffsetY.setValue(e.nativeEvent.contentOffset.y);
+        }}
+        style={[tailwind`bg-white`]}>
+        <View style={tailwind`h-35`} />
+      </ScrollView>
     </View>
   );
 };
