@@ -7,8 +7,12 @@ import Orders from './src/screens/Orders';
 import Profile from './src/screens/Profile';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {StatusBar} from 'react-native';
+import {StatusBar, LogBox} from 'react-native';
 import {styles} from './src/styles';
+import {Provider} from 'react-redux';
+import {store} from './src/core/store';
+
+LogBox.ignoreAllLogs();
 
 const RestaurantStack = createNativeStackNavigator();
 const OrderStack = createNativeStackNavigator();
@@ -54,69 +58,73 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <>
-      <StatusBar
-        animated={true}
-        backgroundColor={styles.white}
-        barStyle="dark-content"
-      />
-      <NavigationContainer>
-        <Tab.Navigator
-          initialRouteName={RestaurantStackScreen}
-          screenOptions={{
-            tabBarActiveTintColor: '#e91e63',
-            tabBarInactiveTintColor: 'black',
-            tabBarStyle: {
-              height: 60,
-            },
-          }}>
-          <Tab.Screen
-            name="Restaurants"
-            component={RestaurantStackScreen}
-            options={{
-              headerShown: false,
-              tabBarIcon: ({color, focused}) => (
-                <MaterialIcons
-                  name="local-restaurant"
-                  color={color}
-                  size={focused ? 42 : 30}
-                />
-              ),
-              tabBarLabelStyle: {paddingBottom: 6},
-            }}
-          />
-          <Tab.Screen
-            name="Your Orders"
-            component={OrderStackScreen}
-            options={{
-              headerShown: false,
-              tabBarIcon: ({color, focused}) => (
-                <MaterialCommunityIcons
-                  name="cart"
-                  color={color}
-                  size={focused ? 40 : 30}
-                />
-              ),
-              tabBarLabelStyle: {paddingBottom: 6},
-            }}
-          />
-          <Tab.Screen
-            name="Profile"
-            component={ProfileStackScreen}
-            options={{
-              headerShown: false,
-              tabBarIcon: ({color, focused}) => (
-                <MaterialCommunityIcons
-                  name="account"
-                  color={color}
-                  size={focused ? 42 : 30}
-                />
-              ),
-              tabBarLabelStyle: {paddingBottom: 6},
-            }}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </>
+    <Provider store={store}>
+      <>
+        <StatusBar
+          animated={true}
+          backgroundColor={styles.white}
+          barStyle="dark-content"
+        />
+        <NavigationContainer>
+          <Tab.Navigator
+            initialRouteName={RestaurantStackScreen}
+            screenOptions={{
+              tabBarHideOnKeyboard: true,
+              tabBarActiveTintColor: '#e91e63',
+              tabBarInactiveTintColor: 'black',
+              tabBarStyle: {
+                height: 55,
+                paddingTop: 2,
+              },
+            }}>
+            <Tab.Screen
+              name="Restaurants"
+              component={RestaurantStackScreen}
+              options={{
+                headerShown: false,
+                tabBarIcon: ({color, focused}) => (
+                  <MaterialIcons
+                    name="local-restaurant"
+                    color={color}
+                    size={focused ? 35 : 30}
+                  />
+                ),
+                tabBarLabelStyle: {paddingBottom: 4, fontSize: 11},
+              }}
+            />
+            <Tab.Screen
+              name="Your Orders"
+              component={OrderStackScreen}
+              options={{
+                headerShown: false,
+                tabBarIcon: ({color, focused}) => (
+                  <MaterialCommunityIcons
+                    name="cart"
+                    color={color}
+                    size={focused ? 35 : 30}
+                  />
+                ),
+                tabBarLabelStyle: {paddingBottom: 4, fontSize: 11},
+              }}
+            />
+            <Tab.Screen
+              name="Profile"
+              component={ProfileStackScreen}
+              options={{
+                headerShown: false,
+                tabBarIcon: ({color, focused}) => (
+                  <MaterialCommunityIcons
+                    name="account"
+                    color={color}
+                    size={focused ? 37 : 30}
+                  />
+                ),
+                tabBarLabelStyle: {paddingBottom: 4, fontSize: 11},
+              }}
+            />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </>
+    </Provider>
   );
 }

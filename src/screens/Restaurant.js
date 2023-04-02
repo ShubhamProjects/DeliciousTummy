@@ -1,13 +1,18 @@
-import React from 'react';
-import {View, ScrollView, Animated} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, ScrollView, Animated, ToastAndroid} from 'react-native';
 import {styles} from '../styles';
 import tailwind from 'twrnc';
 import Header from '../components/Header';
+import RNLocation from 'react-native-location';
+import {useDispatch} from 'react-redux';
+import {setCurrentLocation} from '../core/dataSlice';
 
 const MAX_HEIGHT = 140;
 const MIN_HEIGHT = 64;
 
 const Restaurant = () => {
+  const dispatch = useDispatch();
+
   const scrollOffsetY = new Animated.Value(0);
 
   const diffClamp = Animated.diffClamp(scrollOffsetY, MIN_HEIGHT, MAX_HEIGHT);
@@ -17,11 +22,55 @@ const Restaurant = () => {
     outputRange: [0, -MIN_HEIGHT],
   });
 
+  const [localLocation, setLocalLocation] = useState({});
+
+  useEffect(() => {
+    location();
+  }, []);
+
+  useEffect(() => {
+    if (Object.keys(localLocation)?.length) {
+      dispatch(setCurrentLocation(localLocation));
+    }
+  }, [localLocation]);
+
+  const location = () => {
+    RNLocation.configure({
+      distanceFilter: 5.0,
+      desiredAccuracy: {
+        ios: 'best',
+        android: 'highAccuracy',
+      },
+      androidProvider: 'auto',
+      interval: 5000,
+      fastestInterval: 10000,
+      maxWaitTime: 5000,
+    });
+
+    RNLocation.requestPermission({
+      ios: 'whenInUse',
+      android: {
+        detail: 'coarse',
+      },
+    }).then(granted => {
+      if (granted) {
+        RNLocation.subscribeToLocationUpdates(locations =>
+          setLocalLocation({
+            lat: locations[0].latitude,
+            long: locations[0].longitude,
+          }),
+        );
+      } else {
+        ToastAndroid.show('Failed to fetch your location.', ToastAndroid.LONG);
+      }
+    });
+  };
+
   return (
     <View style={[styles.flx1]}>
       <Animated.View
         style={[
-          tailwind`absolute overflow-hidden bg-white shadow-2xl w-full p-2`,
+          tailwind`absolute rounded-b-xl overflow-hidden bg-white shadow-2xl w-full p-2 `,
           styles.flx1,
           {
             transform: [{translateY: translateY}],
