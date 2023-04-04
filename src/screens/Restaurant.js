@@ -1,16 +1,75 @@
 import React, {useEffect, useState} from 'react';
-import {View, ScrollView, Animated, ToastAndroid} from 'react-native';
+import {View, ScrollView, Animated, ToastAndroid, Text} from 'react-native';
 import {styles} from '../styles';
 import tailwind from 'twrnc';
 import Header from '../components/Header';
 import RNLocation from 'react-native-location';
 import {useDispatch} from 'react-redux';
 import {setCurrentLocation} from '../core/dataSlice';
+import Restaurantcard from '../components/Restaurantcard';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const MAX_HEIGHT = 140;
 const MIN_HEIGHT = 64;
 
-const Restaurant = () => {
+const restaurantData = [
+  {
+    name: 'Zayka',
+    image: <MaterialCommunityIcons name="food" size={250} color={styles.red} />,
+  },
+  {
+    name: 'Cygnett',
+    image: (
+      <MaterialCommunityIcons
+        name="food-drumstick"
+        size={250}
+        color={styles.orange}
+      />
+    ),
+  },
+  {
+    name: 'Hotel Maharaja',
+    image: (
+      <MaterialCommunityIcons
+        name="food-fork-drink"
+        size={250}
+        color={styles.darksalmon}
+      />
+    ),
+  },
+  {
+    name: 'Namkeen',
+    image: (
+      <MaterialCommunityIcons
+        name="food-takeout-box"
+        size={250}
+        color={styles.navy}
+      />
+    ),
+  },
+  {
+    name: 'Jahanbee Resigency',
+    image: (
+      <MaterialCommunityIcons
+        name="food-turkey"
+        size={250}
+        color={styles.darkorange}
+      />
+    ),
+  },
+  {
+    name: 'Brew Bakes',
+    image: (
+      <MaterialCommunityIcons
+        name="food-apple"
+        size={250}
+        color={styles.green}
+      />
+    ),
+  },
+];
+
+const Restaurant = ({navigation}) => {
   const dispatch = useDispatch();
 
   const scrollOffsetY = new Animated.Value(0);
@@ -82,7 +141,7 @@ const Restaurant = () => {
             zIndex: 100,
           },
         ]}>
-        <Header />
+        <Header navigation={navigation} />
       </Animated.View>
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -90,8 +149,13 @@ const Restaurant = () => {
         onScroll={e => {
           scrollOffsetY.setValue(e.nativeEvent.contentOffset.y);
         }}
-        style={[tailwind`bg-white`]}>
+        style={[tailwind`bg-slate-50`]}>
         <View style={tailwind`h-35`} />
+        <>
+          {restaurantData.map((item, index) => (
+            <Restaurantcard key={index?.toString()} item={item} index={index} />
+          ))}
+        </>
       </ScrollView>
     </View>
   );

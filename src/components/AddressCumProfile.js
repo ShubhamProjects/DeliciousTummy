@@ -6,7 +6,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 
-const AddressCumProfile = ({address}) => {
+const AddressCumProfile = ({address, navigation}) => {
   const [blinkEffect, setBlinkEffect] = useState(true);
 
   const blinkRef = useRef();
@@ -64,6 +64,9 @@ const AddressCumProfile = ({address}) => {
       <View>
         <View>
           <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('Profile', {screen: 'Profile Page'})
+            }
             style={[
               tailwind`p-1 rounded-full bg-red-100 border-red-600 mr-2`,
               styles.bw1,
