@@ -1,10 +1,11 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import {styles} from '../styles';
 import tw from 'twrnc';
 import {selectCurrentLocation} from '../core/dataSlice';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
+import ScrollableInfo from '../components/ScrollableInfo';
 
 const Profile = () => {
   const currentLocation = useSelector(selectCurrentLocation);
@@ -12,13 +13,31 @@ const Profile = () => {
   const address = useMemo(() => myAddress, [myAddress]);
 
   const [blinkEffect, setBlinkEffect] = useState(true);
+  const [focusedTab, setFocusedTab] = useState(0);
 
   const blinkRef = useRef();
+  const sectionPressed = useRef();
+  const imperativeHandle = useRef();
 
   const initiateBlink = () => {
     blinkRef.current = setInterval(() => {
       setBlinkEffect(prevEffect => !prevEffect);
     }, 800);
+  };
+
+  const handleTabPress = section => {
+    const onSectionPressed = () => {
+      switch (section) {
+        case 'Recent Orders':
+          return (sectionPressed.current = 0);
+
+        case 'Suggestions for you':
+          return (sectionPressed.current = 600);
+        case 'About Us':
+          return (sectionPressed.current = 1500);
+      }
+    };
+    imperativeHandle.current.scrollHandler(onSectionPressed());
   };
 
   useEffect(() => {
@@ -72,11 +91,76 @@ const Profile = () => {
           </Text>
         </View>
         <View style={[styles.aic, styles.jcc, styles.flx0_3]}>
-          <View style={[tw`rounded-full bg-purple-100 p-4`]}>
+          <TouchableOpacity style={[tw`rounded-full bg-purple-100 p-4`]}>
             <Text style={[tw`text-red-400 text-2xl`]}>SV</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
+
+      <View style={[styles.mt8, styles.mb8, tw`border-b border-gray-300`]}>
+        <View
+          style={[
+            styles.ml8,
+            styles.mr8,
+            styles.flxr,
+            styles.jcsb,
+            styles.aic,
+          ]}>
+          <TouchableOpacity
+            onPress={() => handleTabPress('Recent Orders')}
+            style={[
+              tw`${focusedTab <= 450 ? 'border-b border-gray-500' : ''}`,
+            ]}>
+            <Text
+              style={[
+                tw`${
+                  focusedTab <= 450
+                    ? 'text-red-400 text-base'
+                    : 'text-black italic'
+                }`,
+              ]}>
+              Recent Orders
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleTabPress('Suggestions for you')}
+            style={[
+              tw`${
+                focusedTab > 450 && focusedTab <= 1000
+                  ? 'border-b border-gray-500'
+                  : ''
+              }`,
+            ]}>
+            <Text
+              style={[
+                tw`${
+                  focusedTab > 450 && focusedTab <= 1000
+                    ? 'text-red-400 text-base'
+                    : 'text-black italic'
+                }`,
+              ]}>
+              Suggestions for you
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleTabPress('About Us')}
+            style={[
+              tw`${focusedTab > 1000 ? 'border-b border-gray-500' : ''}`,
+            ]}>
+            <Text
+              style={[
+                tw`${
+                  focusedTab > 1000
+                    ? 'text-red-400 text-base'
+                    : 'text-black italic'
+                }`,
+              ]}>
+              About Us
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <ScrollableInfo setFocusedTab={setFocusedTab} ref={imperativeHandle} />
     </View>
   );
 };
